@@ -4,7 +4,8 @@ import 'dart:io';
 import '../config/services_url.dart';
 
 const String HOME_PAGE_CONTENT = 'homePageContent'; //获取首页主题内容
-const String HOME_PAGE_BELOW_CONTENT = 'homePageBelowContent'; //获取首页火爆专区内容
+const String HOME_PAGE_BELOW_CONTENT = 'homePageBelowConten'; //获取首页火爆专区内容
+const String GET_CATEGORY = 'getCategory'; //获取首页火爆专区内容
 
 Future request(url, {formData}) async {
   try {

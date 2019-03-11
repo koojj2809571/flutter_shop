@@ -1,5 +1,4 @@
 
-
 //火爆商品专区
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/service/service_method.dart';
@@ -12,7 +11,7 @@ class _HotGoodsState extends State<HotGoods>{
 
   @override
   void initState() {
-    request(HOME_PAGE_BELOW_CONTENT,formData: 0).then((val){
+    request(HOME_PAGE_BELOW_CONTENT,formData: 1).then((val){
       print('获取到的数据$val');
     });
     super.initState();
