@@ -3,14 +3,17 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_shop/model/category_model.dart';
+import 'package:flutter_shop/provide/child_category.dart';
 import 'package:flutter_shop/service/service_method.dart';
+import 'package:provide/provide.dart';
 
 class LeftCategoryNav extends StatefulWidget {
   _LeftCategoryNavState createState() => _LeftCategoryNavState();
 }
 
 class _LeftCategoryNavState extends State<LeftCategoryNav> {
-  List leftCategoryList = [];
+  List<Data> leftCategoryList = [];
+  var listIndex = 0;
 
   @override
   void initState() {
@@ -25,13 +28,24 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
       CategoryModel leftCategory = CategoryModel.fromJson(data);
       setState(() {
         leftCategoryList = leftCategory.data;
+        _provideChildCateGory(listIndex);
       });
     });
   }
 
+  void _provideChildCateGory(index){
+    var childList = leftCategoryList[index].bxMallSubDto;
+    Provide.value<ChildCategory>(context).getChildCategory(childList);
+  }
+
   Widget _leftInkWell(int index) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        setState(() {
+          listIndex = index;
+        });
+        _provideChildCateGory(index);
+      },
       child: Container(
         height: ScreenUtil().setHeight(100),
         padding: EdgeInsets.only(
@@ -39,7 +53,7 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
           top: 20,
         ),
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: index == listIndex ? Colors.black12 : Colors.white,
             border:
                 Border(bottom: BorderSide(color: Colors.black12, width: 1))),
         child: Text(

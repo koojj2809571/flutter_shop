@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provide/provide.dart';
+import '../provide/counter.dart';
 
-class MemberPage extends StatelessWidget{
+class MemberPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text('会员中心页'),
-      ),
+      body: Center(child: Provide<Counter>(builder: (context, chile, counter) {
+        return Text(
+          '${counter.value}',
+          style: Theme.of(context).textTheme.display1,
+        );
+      })),
     );
   }
 }
