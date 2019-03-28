@@ -10,9 +10,6 @@ class SwiperDiy extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('设备像素密度：${ScreenUtil.pixelRatio}');
-    print('设备高：${ScreenUtil.screenHeight}');
-    print('设备宽：${ScreenUtil.screenWidth}');
     return Container(
       height: ScreenUtil().setHeight(333),
       width: ScreenUtil().setWidth(750),

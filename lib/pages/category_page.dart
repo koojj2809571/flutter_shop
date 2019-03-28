@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widget/categorypage/left_category_nav.dart';
 import '../widget/categorypage/right_category_nav.dart';
-import '../service/service_method.dart';
-import 'dart:convert';
-import '../model/category_model.dart';
+import '../widget/categorypage/category_goods_list.dart';
 
 class CategoryPage extends StatefulWidget {
   _CategoryPageState createState() => _CategoryPageState();
@@ -23,6 +21,7 @@ class _CategoryPageState extends State<CategoryPage> {
             Column(
               children: <Widget>[
                 RightCategoryNav(),
+                CategoryGoodsList(),
               ],
             ),
           ],

@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_shop/model/category_goods_list_model.dart';
 import 'package:flutter_shop/model/category_model.dart';
 import 'package:flutter_shop/provide/child_category.dart';
 import 'package:flutter_shop/service/service_method.dart';
 import 'package:provide/provide.dart';
+import 'package:flutter_shop/provide/category_goods_list_provide.dart';
 
 class LeftCategoryNav extends StatefulWidget {
   _LeftCategoryNavState createState() => _LeftCategoryNavState();
@@ -18,6 +20,7 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
   @override
   void initState() {
     _getCategory();
+    _getGoodsList();
     super.initState();
   }
 
@@ -33,9 +36,23 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
     });
   }
 
+  void _getGoodsList({String categoryId}) async {
+    var data = {
+      'categoryId': categoryId == null ? '4' : categoryId,
+      'categorySubId': '',
+      'page': '1',
+    };
+
+    await request(GET_MALL_GOODS, formData: data).then((val) {
+      var data = json.decode(val.toString());
+      CategoryGoodsListModel goodsList = CategoryGoodsListModel.fromJson(data);
+      Provide.value<CategoryGoodsListProvide>(context).getCategoryGoodsList(goodsList.data);
+    });
+  }
+
   void _provideChildCateGory(index){
     var childList = leftCategoryList[index].bxMallSubDto;
-    Provide.value<ChildCategory>(context).getChildCategory(childList);
+    Provide.value<ChildCategory>(context).getChildCategory(childList,childList[0].mallCategoryId);
   }
 
   Widget _leftInkWell(int index) {
@@ -45,6 +62,7 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
           listIndex = index;
         });
         _provideChildCateGory(index);
+        _getGoodsList(categoryId:leftCategoryList[index].mallCategoryId);
       },
       child: Container(
         height: ScreenUtil().setHeight(100),
@@ -53,7 +71,7 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
           top: 20,
         ),
         decoration: BoxDecoration(
-            color: index == listIndex ? Colors.black12 : Colors.white,
+            color: index == listIndex ? Color.fromRGBO(240, 240, 240, 1.0) : Colors.white,
             border:
                 Border(bottom: BorderSide(color: Colors.black12, width: 1))),
         child: Text(

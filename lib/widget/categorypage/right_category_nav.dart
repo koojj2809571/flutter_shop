@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_shop/model/category_goods_list_model.dart';
 import 'package:flutter_shop/model/category_model.dart';
+import 'package:flutter_shop/provide/category_goods_list_provide.dart';
 import 'package:flutter_shop/provide/child_category.dart';
+import 'package:flutter_shop/service/service_method.dart';
 import 'package:provide/provide.dart';
 
 class RightCategoryNav extends StatefulWidget {
@@ -10,11 +15,9 @@ class RightCategoryNav extends StatefulWidget {
 
 class _RightCategoryNavState extends State<RightCategoryNav> {
   List<BxMallSubDto> list = [];
-  int clickItem;
 
   @override
   void initState() {
-    clickItem = 0;
     super.initState();
   }
 
@@ -37,7 +40,8 @@ class _RightCategoryNavState extends State<RightCategoryNav> {
             scrollDirection: Axis.horizontal,
             itemCount: childCategory.childCategoryList.length,
             itemBuilder: (context, index) {
-              return _rightInkWell(index);
+              return _rightInkWell(
+                  index, childCategory.childCategoryList[index]);
             },
           ),
         ),
@@ -45,25 +49,47 @@ class _RightCategoryNavState extends State<RightCategoryNav> {
     });
   }
 
-  Widget _rightInkWell(int itemIndex) {
+  Widget _rightInkWell(int index, BxMallSubDto item) {
+    bool isClick = false;
+    isClick = (index == Provide.value<ChildCategory>(context).childIndex
+        ? true
+        : false);
     return Container(
       padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
       child: InkWell(
         onTap: () {
-          setState(() {
-            clickItem = itemIndex;
-          });
+          Provide.value<ChildCategory>(context).changeChildIndex(index,item.mallSubId);
+          _getGoodsList(item.mallSubId);
         },
         child: Text(
-          list[itemIndex].mallSubName,
+          list[index].mallSubName,
           style: TextStyle(
             fontSize: ScreenUtil().setSp(28),
-            color: itemIndex == clickItem ? Colors.pink : Colors.black26,
-            fontWeight:
-                itemIndex == clickItem ? FontWeight.bold : FontWeight.normal,
+            color: isClick ? Colors.pink : Colors.black26,
+            fontWeight: isClick ? FontWeight.bold : FontWeight.normal,
           ),
         ),
       ),
     );
+  }
+
+  void _getGoodsList(String categorySubId) async {
+    var data = {
+      'categoryId': Provide.value<ChildCategory>(context).categoryId,
+      'categorySubId': categorySubId,
+      'page': '1',
+    };
+
+    await request(GET_MALL_GOODS, formData: data).then((val) {
+      var data = json.decode(val.toString());
+      CategoryGoodsListModel goodsList = CategoryGoodsListModel.fromJson(data);
+      if (goodsList.data == null) {
+        Provide.value<CategoryGoodsListProvide>(context)
+            .getCategoryGoodsList([]);
+      } else {
+        Provide.value<CategoryGoodsListProvide>(context)
+            .getCategoryGoodsList(goodsList.data);
+      }
+    });
   }
 }
