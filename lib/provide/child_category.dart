@@ -6,8 +6,12 @@ class ChildCategory with ChangeNotifier{
   int childIndex = 0;
   String categoryId = '4';
   String subId = '';
+  int page = 1;
+  String noMreText = '';
 
   getChildCategory(List<BxMallSubDto> list, String id){
+    page = 1;
+    noMreText = '';
     categoryId = id;
     childIndex = 0;
     childCategoryList.clear();
@@ -17,10 +21,19 @@ class ChildCategory with ChangeNotifier{
   }
 
   changeChildIndex(index,String id){
+    page = 1;
+    noMreText = '';
     subId = id;
     childIndex = index;
     notifyListeners();
   }
 
+  addPage(){
+    page++;
+  }
 
+  changeNoMoreText(String text){
+    noMreText = text;
+    notifyListeners();
+  }
 }
