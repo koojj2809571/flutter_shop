@@ -11,7 +11,7 @@ import '../widget/homepage/ad_banner.dart';
 import '../widget/homepage/floor_widget.dart';
 import '../widget/homepage/leader_phone.dart';
 import '../widget/homepage/recommed.dart';
-import '../widget/homepage/hot_goods.dart';
+import '../router/application.dart';
 
 class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
@@ -46,7 +46,9 @@ class _HomePageState extends State<HomePage>
     if (hotGoodsList.length != 0) {
       List<Widget> listWidget = hotGoodsList.map((val) {
         return InkWell(
-          onTap: () {},
+          onTap: () {
+            Application.router.navigateTo(context, '/details?id=${val['goodsId']}');
+          },
           child: Container(
             width: ScreenUtil().setWidth(372),
             color: Colors.white,
