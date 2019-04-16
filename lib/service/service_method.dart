@@ -7,6 +7,7 @@ const String HOME_PAGE_CONTENT = 'homePageContent'; //获取首页主题内容
 const String HOME_PAGE_BELOW_CONTENT = 'homePageBelowConten'; //获取首页火爆专区内容
 const String GET_CATEGORY = 'getCategory'; //获取首页火爆专区内容
 const String GET_MALL_GOODS = 'getMallGoods'; //获取商品分类的商品列表
+const String GET_GOODS_DETAIL_BY_ID = 'getGoodDetailById'; //获取商品详情
 
 Future request(url, {formData}) async {
   try {
