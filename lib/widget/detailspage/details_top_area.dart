@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_shop/model/details.dart';
 import 'package:provide/provide.dart';
 import '../../provide/details_info.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,7 +24,9 @@ class DetailsTopArea extends StatelessWidget {
             ),
           );
         } else {
-          return Text('正在加载中......');
+          return Center(
+            child: Text('正在加载中......'),
+          );
         }
       },
     );
@@ -82,11 +85,11 @@ class DetailsTopArea extends StatelessWidget {
             child: Text(
               '市场价:￥$oriPrice',
               style: TextStyle(
-                  color: Colors.black26, decoration: TextDecoration.lineThrough),
+                  color: Colors.black26,
+                  decoration: TextDecoration.lineThrough),
             ),
           ),
         ],
-
       ),
     );
   }
