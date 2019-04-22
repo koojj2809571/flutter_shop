@@ -5,6 +5,7 @@ import '../widget/detailspage/details_top_area.dart';
 import '../widget/detailspage/details_explain.dart';
 import '../widget/detailspage/details_tab_bar.dart';
 import '../widget/detailspage/details_web.dart';
+import '../widget/detailspage/details_bottom.dart';
 
 class PageDetails extends StatelessWidget {
   final String goodsId;
@@ -26,15 +27,24 @@ class PageDetails extends StatelessWidget {
         future: _getBackInfo(context),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Container(
-              child: ListView(
-                children: <Widget>[
-                  DetailsTopArea(),
-                  DetailsExplain(),
-                  DetailsTabBar(),
-                  DetailsWeb(),
-                ],
-              ),
+            return Stack(
+              children: <Widget>[
+                Container(
+                  child: ListView(
+                    children: <Widget>[
+                      DetailsTopArea(),
+                      DetailsExplain(),
+                      DetailsTabBar(),
+                      DetailsWeb(),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  left: 0,
+                  bottom: 0,
+                  child: DetailsBottom(),
+                )
+              ],
             );
           } else {
             return Center(

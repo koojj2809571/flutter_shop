@@ -1,48 +1,72 @@
 import 'package:flutter/material.dart';
-import 'package:provide/provide.dart';
-import '../provide/counter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ShoppingCartPage extends StatelessWidget {
+class ShoppingCartPage extends StatefulWidget {
+  _ShoppingCartPageState createState() => _ShoppingCartPageState();
+}
+
+class _ShoppingCartPageState extends State<ShoppingCartPage> {
+
+  List<String> testList = [];
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
+    _show();  //每次进入前进行显示
+    return Container(
+
+        child:Column(
           children: <Widget>[
-            Number(),
-            MyButton(),
+            Container(
+              height: 500.0,
+              child: ListView.builder(
+                itemCount:testList.length ,
+                itemBuilder: (context,index){
+                  return ListTile(
+                    title: Text(testList[index]),
+                  );
+                },
+              ) ,
+            ),
+
+            RaisedButton(
+              onPressed: (){_add();},
+              child: Text('增加'),
+            ),
+            RaisedButton(
+              onPressed: (){_clear();},
+              child: Text('清空'),
+            ),
           ],
-        ),
-      ),
-    );
-  }
-}
+        )
 
-class Number extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 200),
-      child: Provide<Counter>(builder: (context, child, counter) {
-        return Text(
-          '${counter.value}',
-          style: Theme.of(context).textTheme.display1,
-        );
-      }),
     );
   }
-}
 
-class MyButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: RaisedButton(
-        onPressed: () {
-          Provide.value<Counter>(context).increment();
-        },
-        child: Text("点击+1"),
-      ),
-    );
+  void _show() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      if(prefs.getStringList('testInfo')!=null){
+        testList=prefs.getStringList('testInfo');
+      }
+    });
   }
+
+  void _add() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String temp="技术胖是最胖的!";
+    testList.add(temp);
+    prefs.setStringList('testInfo', testList);
+    _show();
+  }
+
+  void _clear() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //prefs.clear(); //全部清空
+    prefs.remove('testInfo'); //删除key键
+    setState((){
+      testList=[];
+    });
+  }
+
 }
