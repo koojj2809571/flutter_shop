@@ -17,6 +17,7 @@ class DetailsWeb extends StatelessWidget {
         var isLeft = Provide.value<DetailsInfoProvide>(context).isLeft;
         if (isLeft) {
           return Container(
+            padding: EdgeInsets.only(bottom:60),
             child: Html(data: goodsDetail),
           );
         }else{

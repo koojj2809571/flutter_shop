@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_shop/model/category_goods_list_model.dart';
 import 'package:flutter_shop/provide/category_goods_list_provide.dart';
 import 'package:flutter_shop/provide/child_category.dart';
+import 'package:flutter_shop/router/application.dart';
 import 'package:flutter_shop/service/service_method.dart';
 import 'package:provide/provide.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -73,14 +74,14 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
     );
   }
 
-  Widget _goodsImage(List list, index) {
+  Widget _goodsImage(List<CategoryListData> list, index) {
     return Container(
       width: ScreenUtil().setWidth(200),
       child: Image.network(list[index].image),
     );
   }
 
-  Widget _goodsName(List list, index) {
+  Widget _goodsName(List<CategoryListData> list, index) {
     return Container(
       padding: EdgeInsets.all(5),
       width: ScreenUtil().setWidth(370),
@@ -93,7 +94,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
     );
   }
 
-  Widget _goodsPrice(List list, index) {
+  Widget _goodsPrice(List<CategoryListData> list, index) {
     return Container(
         margin: EdgeInsets.only(top: 20),
         width: ScreenUtil().setWidth(370),
@@ -118,9 +119,11 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
         ));
   }
 
-  Widget _listItemWidget(List list, index) {
+  Widget _listItemWidget(List<CategoryListData> list, index) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Application.router.navigateTo(context, '/details?id=${list[index].goodsId}');
+      },
       child: Container(
         padding: EdgeInsets.only(top: 5, bottom: 5),
         decoration: BoxDecoration(
