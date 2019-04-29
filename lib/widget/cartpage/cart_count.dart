@@ -5,9 +5,9 @@ import 'package:flutter_shop/provide/cart.dart';
 import 'package:provide/provide.dart';
 
 class CartCount extends StatelessWidget {
-//  final int index;
-//
-//  CartCount(this.index);
+  CartInfoModel cartInfo;
+
+  CartCount(this.cartInfo);
 
   @override
   Widget build(BuildContext context) {
@@ -18,23 +18,28 @@ class CartCount extends StatelessWidget {
           BoxDecoration(border: Border.all(width: 1, color: Colors.black12)),
       child: Row(
         children: <Widget>[
-          _reduceBtn(),
+          _reduceBtn(context),
           _countArea(),
-          _addBtn(),
+          _addBtn(context),
         ],
       ),
     );
   }
 
-  Widget _reduceBtn() {
+  Widget _reduceBtn(BuildContext context) {
+    bool canReduce = cartInfo.count > 1;
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        if(canReduce) {
+          Provide.value<CartProvide>(context).changeGoodsCount(cartInfo, -1);
+        }
+      },
       child: Container(
         width: ScreenUtil().setWidth(45),
         height: ScreenUtil().setHeight(45),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: canReduce ? Colors.white : Colors.black26,
           border: Border(
             right: BorderSide(
               width: 1,
@@ -42,14 +47,16 @@ class CartCount extends StatelessWidget {
             ),
           ),
         ),
-        child: Text('-'),
+        child: Text(canReduce ? '-' : ''),
       ),
     );
   }
 
-  Widget _addBtn() {
+  Widget _addBtn(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Provide.value<CartProvide>(context).changeGoodsCount(cartInfo, 1);
+      },
       child: Container(
         width: ScreenUtil().setWidth(45),
         height: ScreenUtil().setHeight(45),
@@ -69,19 +76,12 @@ class CartCount extends StatelessWidget {
   }
 
   Widget _countArea() {
-//    return
-//      Provide<CartProvide>(
-//      builder: (context, child, category) {
-//        List<CartInfoModel> cartInfoList =
-//            Provide.value<CartProvide>(context).cartInfoList;
-        return Container(
-          width: ScreenUtil().setWidth(70),
-          height: ScreenUtil().setHeight(45),
-          alignment: Alignment.center,
-          color: Colors.white,
-          child: Text('1'),
-        );
-//      },
-//    );
+    return Container(
+      width: ScreenUtil().setWidth(70),
+      height: ScreenUtil().setHeight(45),
+      alignment: Alignment.center,
+      color: Colors.white,
+      child: Text('${cartInfo.count}'),
+    );
   }
 }
