@@ -21,11 +21,17 @@ class CartProvide with ChangeNotifier {
     List<Map> tempList = (temp as List).cast();
     bool isHave = false;
     int i = 0;
+    allPrice = 0;
+    allGoodsCount = 0;
     tempList.forEach((item) {
       if (item['goodsId'] == goodsId) {
         tempList[i]['count'] = item['count'] + 1;
         cartInfoList[i].count++;
         isHave = true;
+      }
+      if(item['isCheck']){
+        allPrice += (cartInfoList[i].price * cartInfoList[i].count);
+        allGoodsCount += cartInfoList[i].count;
       }
       i++;
     });
@@ -40,6 +46,8 @@ class CartProvide with ChangeNotifier {
         'isCheck': true,
       };
       tempList.add(newGoods);
+      allPrice += count * price;
+      allGoodsCount += count;
       cartInfoList.add(CartInfoModel.fromJson(newGoods));
     }
 
@@ -117,7 +125,6 @@ class CartProvide with ChangeNotifier {
       if (item['goodsId'] == cartItem.goodsId) {
         item['count'] += count;
       }
-//      item['isCheck'] = item['count'] > 0;
     });
     cartString = json.encode(tempList).toString();
     sp.setString(cartInfo, cartString);
